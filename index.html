@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 1st Anniversary!</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles - Romantic Blue Theme */
+        :root {
+            --primary: #3a86ff;
+            --primary-hover: #2563eb;
+            --bg: #f0f6ff;
+            --text: #1e293b;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        h1, h2, h3 {
+            font-family: 'Great Vibes', cursive;
+            font-weight: 400;
+            margin: 0 0 10px 0;
+        }
+
+        /* Floating Blue Hearts Animation */
+        .heart-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: -1; overflow: hidden;
+        }
+        .floating-heart {
+            position: absolute; color: #93c5fd; opacity: 0;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(45deg); opacity: 0; }
+        }
+
+        /* Screen Navigation Logic */
+        .screen {
+            display: none;
+            min-height: 100vh;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease-in;
+        }
+        .screen.active {
+            display: flex;
+        }
+
+        /* Buttons & Interactions */
+        .cute-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.4);
+            font-family: 'Poppins', sans-serif;
+        }
+        .cute-btn:hover {
+            transform: scale(1.05);
+            background-color: var(--primary-hover);
+        }
+        .heart-pulse {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Screen 2: Photo Flip Cards (Fixed Positioning) */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 30px;
+        }
+        .flip-card {
+            background-color: transparent;
+            height: 250px;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s ease-in-out;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 20px rgba(58, 134, 255, 0.15);
+        }
+        .flip-card-front {
+            background-color: #bfdbfe;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .flip-card-front::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(30, 41, 59, 0.35);
+            border-radius: 12px;
+            z-index: 1;
+        }
+        .flip-card-front span {
+            position: relative;
+            z-index: 2;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        .flip-card-back {
+            background-color: var(--primary);
+            color: white;
+            transform: rotateY(180deg);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Screen 3: Video Container */
+        .video-container {
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 16 / 9;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Screen 4: Envelope Glassmorphism (Blue Theme) */
+        .envelope-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px dashed var(--primary);
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(58, 134, 255, 0.15);
+            transition: all 0.5s ease;
+        }
+
+        /* Visual Envelope Art */
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto 30px auto;
+            background-color: #93c5fd;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            perspective: 1000px;
+            transition: opacity 0.5s ease;
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 120px solid #2563eb;
+            transform-origin: top;
+            transition: transform 0.8s ease-in-out, z-index 0s 0.8s;
+            z-index: 4;
+        }
+        .envelope-front {
+            position: absolute;
+            bottom: 0; left: 0; width: 0; height: 0;
+            border-left: 150px solid #60a5fa;
+            border-right: 150px solid #60a5fa;
+            border-bottom: 120px solid #3b82f6;
+            z-index: 3;
+            border-radius: 0 0 10px 10px;
+        }
+        .envelope-paper {
+            position: absolute;
+            bottom: 10px; left: 5%; width: 90%; height: 90%;
+            background-color: white;
+            border-radius: 5px;
+            z-index: 2;
+            transition: transform 1s ease-in-out 0.8s;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        .envelope-wrapper.open .envelope-paper {
+            transform: translateY(-110px);
+            z-index: 5;
+        }
+
+        /* Passcode & Letter Content */
+        .passcode-inputs input {
+            font-size: 2rem;
+            letter-spacing: 15px;
+            text-indent: 15px;
+            width: 140px;
+            text-align: center;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            margin: 20px 0;
+            outline: none;
+            font-family: monospace;
+        }
+        .error-msg { color: #dc2626; display: none; margin-top: 15px; font-weight: bold; }
+        .letter-content {
+            display: none;
+            text-align: left;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            animation: fadeIn 1s;
+        }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .shake { animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-10px); } 50% { transform: translateX(10px); } }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: Greeting -->
+    <div id="screen-1" class="screen active" style="background: linear-gradient(135deg, #93c5fd, #3b82f6); color: white;">
+        <h1 style="font-size: 4.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.15);">Happy 1st Anniversary, my love!</h1>
+        <p style="font-size: 1.2rem;">I made a little something for you.</p>
+        <button class="cute-btn heart-pulse" onclick="goToScreen(1, 2)">Open mo gift ko sayo 💙</button>
+    </div>
+
+    <!-- SCREEN 2: Memories Flip Cards -->
+    <div id="screen-2" class="screen">
+        <h2 style="color: var(--primary); font-size: 3.5rem;">Our Year in Photos</h2>
+        <p>Hover mo sa mga photos love</p>
+
+        <div class="photo-grid">
+
+            <!-- Card 1: Our First Date -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('firstdate.jpg');">
+                        <span>Our First Date</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>I remember being so nervous, but the moment I saw you, everything just felt right.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Holding Hands -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('holdinghands.jpg');">
+                        <span>Holding Hands</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>The moment our hands intertwined, I knew I never wanted to let go.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Best Coffee Date -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('coffee.jpg');">
+                        <span>Coffee Date</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Nothing beats good caffeine and even better conversations with you.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Workout Pic -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('workout.jpg');">
+                        <span>Workout Partners</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Pushing each other to be our best. You are always my favorite motivation.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Best Food Date -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('fooddate.jpg');">
+                        <span>Best Food Date</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Whether we're out eating or just making late-night snacks together, any meal with you is the best.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Silliest Moment -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('silliest.jpg');">
+                        <span>Silliest Moment</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>I love that we can literally just do nothing and still end up laughing until our stomachs hurt.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7: Favorite Getaway -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('getaway.jpg');">
+                        <span>Favorite Getaway</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Our trip together, just the sun, the sand, and my favorite person in the world.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8: Random Selfie -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('random.jpg');">
+                        <span>Random Selfie</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Just us being us. I wouldn't trade these little everyday moments for anything.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9: My Favorite -->
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="background-image: url('favorite.jpg');">
+                        <span>My Favorite</span>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Honestly, it was impossible to pick just one favorite memory. Everyday with you is my favorite.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <button class="cute-btn" onclick="goToScreen(2, 3)">There's more... ➔</button>
+    </div>
+
+    <!-- SCREEN 3: Dedicated Song -->
+    <div id="screen-3" class="screen" style="background-color: transparent;">
+        <h2 style="color: var(--primary); font-size: 3.5rem;">My Song For You</h2>
+        <p>Listen to this while you proceed to the next step.</p>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/MVrPhW8933U?si=HEIU8AhLC3VPX1QX" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <button class="cute-btn" onclick="goToScreen(3, 4)">Next: A Secret for You ➔</button>
+    </div>
+
+    <!-- SCREEN 4: Interactive Envelope -->
+    <div id="screen-4" class="screen">
+        <h2 style="color: var(--primary); font-size: 3.5rem;">A Secret Letter</h2>
+        <div class="envelope-container" id="envelope-container">
+
+            <div class="envelope-wrapper" id="envelope-wrapper">
+                <div class="envelope-flap"></div>
+                <div class="envelope-paper">My Love...</div>
+                <div class="envelope-front"></div>
+            </div>
+
+            <div id="lock-screen">
+                <p>Enter the 4-digit passcode to unlock your letter.</p>
+                <p style="font-size: 0.9rem; color: #64748b;">(Hint: Our anniversary date)</p>
+                <div class="passcode-inputs">
+                    <input type="password" id="passcode" maxlength="4" placeholder="••••">
+                </div>
+                <button onclick="checkPasscode()" class="cute-btn" style="margin-top: 10px;">Unlock</button>
+                <p id="error-msg" class="error-msg">Incorrect passcode. Try again!</p>
+            </div>
+
+            <div id="letter-content" class="letter-content">
+                <h3 style="color: var(--primary); font-size: 2.5rem; margin-bottom: 5px;">My Love,</h3>
+
+                <p>Happy 1st Anniversary! Grabe, isang taon na pala tayo. Time really flies kapag masaya ka, and this past year has been nothing short of amazing because I spent it with you.</p>
+
+                <p>Ginawa ko tong little website na to kasi I wanted to surprise you with something unique. Thank you for everything, love. Thank you sa walang sawang pag-intindi, sa pagsupport sa mga ginagawa ko, at sa pagmamahal na pinaparamdam mo sa akin araw-araw.</p>
+
+                <p>Kahit na may mga madalang tayong away na malala, I’m so proud of us kasi palagi natin nalalampasan. Walang sumusuko, at palagi natin pinipili ang isa't isa. And love, alam ko minsan nagdadoubt ka sa sarili mo and you feel insecure, pero gusto kong palaging ipaalala sayo na you are more than enough. Sana makita mo yung sarili mo exactly the way I see you. Beautiful, amazing, and totally irreplaceable. Walang kulang sayo kaya huwag ka na magdoubt ha?</p>
+
+                <p>This is just our first year, pero excited na ako sa lahat ng susunod pa natin na chapters. I promise to always be here for you, sa mga masasayang araw at lalo na sa mga times na kailangan mo ng kakampi at magrere-assure sayo.</p>
+
+                <p>I love you so much love. Happy anniversary! &lt;3</p>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="cute-btn" onclick="goToScreen(4, 5)">One Last Thing...</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 5: Outro -->
+    <div id="screen-5" class="screen" style="background: linear-gradient(135deg, #93c5fd, #3b82f6); color: white;">
+        <h1 style="font-size: 4rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.15);">To Be Continued...</h1>
+        <p style="font-size: 1.3rem;">This first year was amazing, but it's only chapter one.</p>
+
+        <!-- Using favorite.jpg for the big finale photo! -->
+        <div class="photo-placeholder" style="width: 300px; height: 300px; margin: 20px auto; border-radius: 50%; border: 5px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.2); background-image: url('myfavorite.png'); background-size: cover; background-position: center;">
+        </div>
+
+        <h2 style="margin-top: 20px; font-size: 3.5rem;">I love you!</h2>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function goToScreen(currentId, nextId) {
+            document.getElementById(`screen-${currentId}`).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(`screen-${nextId}`).classList.add('active');
+                window.scrollTo(0, 0);
+            }, 100);
+        }
+
+        function checkPasscode() {
+            const input = document.getElementById('passcode').value;
+            const lockScreen = document.getElementById('lock-screen');
+            const errorMsg = document.getElementById('error-msg');
+            const letterContent = document.getElementById('letter-content');
+            const envelopeContainer = document.getElementById('envelope-container');
+            const envelopeWrapper = document.getElementById('envelope-wrapper');
+
+            // SET YOUR SECRET 4-DIGIT CODE HERE
+            const correctPasscode = "0901";
+
+            if (input === correctPasscode) {
+                lockScreen.style.display = 'none';
+                envelopeWrapper.classList.add('open');
+
+                setTimeout(() => {
+                    envelopeWrapper.style.display = 'none';
+                    letterContent.style.display = 'block';
+                    envelopeContainer.style.borderStyle = 'solid';
+                    envelopeContainer.style.background = 'rgba(240, 246, 255, 0.95)';
+                }, 2200);
+
+            } else {
+                errorMsg.style.display = 'block';
+                lockScreen.classList.remove('shake');
+                void lockScreen.offsetWidth;
+                lockScreen.classList.add('shake');
+                document.getElementById('passcode').value = '';
+            }
+        }
+
+        // Floating Hearts Background Logic
+        function startFloatingHearts() {
+            const container = document.createElement('div');
+            container.className = 'heart-bg';
+            document.body.appendChild(container);
+
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '🩵';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                heart.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 8000);
+            }, 400);
+        }
+
+        document.addEventListener('DOMContentLoaded', startFloatingHearts);
+    </script>
+</body>
+</html>
