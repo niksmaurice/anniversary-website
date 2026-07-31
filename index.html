@@ -409,14 +409,31 @@
         <button class="cute-btn" onclick="goToScreen(2, 3)">There's more... ➔</button>
     </div>
 
-    <!-- SCREEN 3: Dedicated Song -->
+    <!-- SCREEN 3: The Prank Song -->
     <div id="screen-3" class="screen" style="background-color: transparent;">
-        <h2 style="color: var(--primary); font-size: 3.5rem;">Song ko for you lovelove</h2>
-        <p>Play mo lang, magpeplay yan kahet mag next ka :)</p>
+        <h2 style="color: var(--primary); font-size: 3.5rem;">Our Theme Song? 🤔</h2>
+        <p>Play mo muna to bago ka mag next! I know you love this one... 😂</p>
+        <div class="video-container">
+            <iframe id="joke-video" src="https://www.youtube.com/embed/T8DLCWW6EpY?si=PZtTytim6_FfJiaI" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <button class="cute-btn" onclick="goToScreen(3, 'joke')">Next ➔</button>
+    </div>
+
+    <!-- SCREEN JOKE: The Reveal -->
+    <div id="screen-joke" class="screen" style="background: linear-gradient(135deg, #93c5fd, #3b82f6); color: white;">
+        <h1 style="font-size: 4rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.15);">Haha, joke lang love! 😜</h1>
+        <p style="font-size: 1.3rem;">Kala mo ha! I wouldn't use that song for our anniversary!</p>
+        <button class="cute-btn heart-pulse" style="background-color: white; color: var(--primary);" onclick="goToScreen('joke', 'real-song')">Listen to the real one 💙</button>
+    </div>
+
+    <!-- SCREEN REAL SONG: Dedicated Song -->
+    <div id="screen-real-song" class="screen" style="background-color: transparent;">
+        <h2 style="color: var(--primary); font-size: 3.5rem;">My Song For You lovelove</h2>
+        <p>Eto na yung totoo. Play mo lang, magpeplay yan kahet mag next ka :)</p>
         <div class="video-container">
             <iframe src="https://www.youtube.com/embed/MVrPhW8933U?si=HEIU8AhLC3VPX1QX" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <button class="cute-btn" onclick="goToScreen(3, 4)">Next: A Message for You ➔</button>
+        <button class="cute-btn" onclick="goToScreen('real-song', 4)">Next: A Message for You ➔</button>
     </div>
 
     <!-- SCREEN 4: Interactive Envelope -->
@@ -432,7 +449,7 @@
 
             <div id="lock-screen">
                 <p>Enter the 4-digit passcode to unlock your letter.</p>
-                <p style="font-size: 0.9rem; color: #64748b;">(Hint: Day One)</p>
+                <p style="font-size: 0.9rem; color: #64748b;">(Hint: The first day of the 'Ber' months)</p>
                 <div class="passcode-inputs">
                     <input type="password" id="passcode" maxlength="4" placeholder="••••">
                 </div>
@@ -476,6 +493,17 @@
     <script>
         function goToScreen(currentId, nextId) {
             document.getElementById(`screen-${currentId}`).classList.remove('active');
+
+            // This stops the joke video from playing in the background when she clicks Next
+            if (currentId === 3) {
+                const jokeFrame = document.getElementById('joke-video');
+                if (jokeFrame) {
+                    const tempSrc = jokeFrame.src;
+                    jokeFrame.src = '';
+                    jokeFrame.src = tempSrc;
+                }
+            }
+
             setTimeout(() => {
                 document.getElementById(`screen-${nextId}`).classList.add('active');
                 window.scrollTo(0, 0);
