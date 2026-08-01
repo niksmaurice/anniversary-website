@@ -181,6 +181,57 @@
         }
         iframe { width: 100%; height: 100%; border: none; }
 
+        /* Screen Reasons: Floating Reason Cards */
+        .reasons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: left;
+        }
+        .reason-card {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(58, 134, 255, 0.1);
+            border-left: 5px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.6s forwards ease-out;
+        }
+        /* Staggered animation for the 10 reasons */
+        .reason-card:nth-child(1) { animation-delay: 0.1s; }
+        .reason-card:nth-child(2) { animation-delay: 0.2s; }
+        .reason-card:nth-child(3) { animation-delay: 0.3s; }
+        .reason-card:nth-child(4) { animation-delay: 0.4s; }
+        .reason-card:nth-child(5) { animation-delay: 0.5s; }
+        .reason-card:nth-child(6) { animation-delay: 0.6s; }
+        .reason-card:nth-child(7) { animation-delay: 0.7s; }
+        .reason-card:nth-child(8) { animation-delay: 0.8s; }
+        .reason-card:nth-child(9) { animation-delay: 0.9s; }
+        .reason-card:nth-child(10) { animation-delay: 1.0s; }
+
+        .reason-number {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            min-width: 40px;
+            text-align: center;
+        }
+        .reason-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Screen 4: Envelope Glassmorphism */
         .envelope-container {
             background: rgba(255, 255, 255, 0.8);
@@ -431,9 +482,59 @@
         <h2 style="color: var(--primary); font-size: 3.5rem;">My Song For You lovelove</h2>
         <p>Eto na yung totoo. Play mo lang, magpeplay yan kahet mag next ka :)</p>
         <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/MVrPhW8933U?si=HEIU8AhLC3VPX1QX" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe id="real-video" src="https://www.youtube.com/embed/MVrPhW8933U?si=HEIU8AhLC3VPX1QX" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <button class="cute-btn" onclick="goToScreen('real-song', 4)">Next: A Message for You ➔</button>
+        <button class="cute-btn" onclick="goToScreen('real-song', 'reasons')">Next: Why I Love You ➔</button>
+    </div>
+
+    <!-- SCREEN REASONS: 10 Reasons I Love You -->
+    <div id="screen-reasons" class="screen">
+        <h2 style="color: var(--primary); font-size: 3.5rem;">10 Reasons I Love You</h2>
+
+        <div class="reasons-container">
+            <div class="reason-card">
+                <div class="reason-number">1</div>
+                <div class="reason-text">Kase naging safe space kita. Di ko need itago flaws ko or magpretend na tough when I'm with you.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">2</div>
+                <div class="reason-text">Sinusupport mo ko lagi sa mga goals ko and you help me become better. Even when I'm trying new things.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">3</div>
+                <div class="reason-text">I can talk to you about anything and it never gets bored.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">4</div>
+                <div class="reason-text">Your very kind heart. You treat me and other people kahet friends ko with deep care and patience lalo kay Ledj HAHA.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">5</div>
+                <div class="reason-text">Feel ko secure ako magshare sayo ng honest thoughts ko without you judging me or pagtatawanan ako.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">6</div>
+                <div class="reason-text">The special way you look at me, legit to. Parang feeling ko tuloy sobrang pogi ko HAHA.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">7</div>
+                <div class="reason-text">You accept me just as I am.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">8</div>
+                <div class="reason-text">On bad days, alam mo kung pano papagaanin loob ko.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">9</div>
+                <div class="reason-text">Napaka-forgiving mo, although minsan parang naaabuso ka na.</div>
+            </div>
+            <div class="reason-card">
+                <div class="reason-number">10</div>
+                <div class="reason-text">And of course, just being you. I love you simply for being the wonderful person you are.</div>
+            </div>
+        </div>
+
+        <button class="cute-btn" onclick="goToScreen('reasons', 4)">Next: A Secret for You ➔</button>
     </div>
 
     <!-- SCREEN 4: Interactive Envelope -->
@@ -501,6 +602,15 @@
                     const tempSrc = jokeFrame.src;
                     jokeFrame.src = '';
                     jokeFrame.src = tempSrc;
+                }
+            }
+            // This stops the real song from playing when she moves to the Reasons page to read
+            if (currentId === 'real-song') {
+                const realFrame = document.getElementById('real-video');
+                if (realFrame) {
+                    const tempSrc = realFrame.src;
+                    realFrame.src = '';
+                    realFrame.src = tempSrc;
                 }
             }
 
